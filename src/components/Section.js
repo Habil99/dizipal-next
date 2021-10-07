@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import {BiPlus} from "react-icons/bi";
 import {BsPlayCircle} from 'react-icons/bs'
+import {SectionCard} from "@/components/index";
 
 const Section = ({title, size, data}) => {
   return (
@@ -16,25 +18,13 @@ const Section = ({title, size, data}) => {
       </div>
       <div className={`section-cards ${size === 'lg' ? 'lg' : 'md'}`}>
         {data?.map(({id, original_title, vote_average, backdrop_path}) => (
-          <div className="section-card" key={id}>
-            <Link href="/">
-              <a className="stretched-link"/>
-            </Link>
-            <div className="section-card-img">
-              <img src={`https://image.tmdb.org/t/p/original${backdrop_path}`} alt="Dizipal Movies"/>
-              <div className="section-card-img-layer">
-              <span>
-                <BsPlayCircle/>
-              </span>
-                <span className="watch">Watch</span>
-              </div>
-            </div>
-            <p className="section-card-name">{original_title}</p>
-            <p>
-              <span className="section-card-imdb-title">IMDB</span>
-              <span className="section-card-imdb-rate">{vote_average}</span>
-            </p>
-          </div>
+          <SectionCard
+            key={id}
+            id={id}
+            title={original_title}
+            imdb={vote_average}
+            backdrop_path={backdrop_path}
+          />
         ))}
       </div>
     </div>

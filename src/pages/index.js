@@ -1,33 +1,55 @@
 import {Layout, Section} from "@/components";
 import Head from "next/head";
 import {connect} from "react-redux";
-import {GET_MOVIES} from "@/redux/features/moviesSlice";
+import {SET_MOVIES} from "@/redux/features/moviesSlice";
 import {wrapper} from "@/redux/store";
 import {useEffect} from "react";
-import { useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
+import axios from "axios";
+import {tmdbApi} from "@/base";
 
-function Home({movies, status, GET_MOVIES}) {
+import { SearchBanner } from "@/components";
+
+function Home({response, movies, status, SET_MOVIES, name}) {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(GET_MOVIES())
-  }, [dispatch])
+    dispatch(SET_MOVIES(response))
+  }, [])
+
   return (
     <>
       <Head>
         <title>Dizipal NextJs</title>
       </Head>
+      <SearchBanner />
       <div className="g-container--def g-container">
-        {status === 'loading' ? <div>Loading...</div> : <Section size="lg" title="Movies" data={movies}/>}
+        <h1>{name}</h1>
+        {status === 'loading' ? <div>Loading...</div> : <Section size="lg" title="Movies" data={movies.results}/>}
         <Section size="md" title="Series"/>
       </div>
     </>
   )
 }
 
-export const getServerSideProps = wrapper.getServerSideProps(store => {
-  store.dispatch(GET_MOVIES())
-})
+export const getStaticProps = async () => {
+  const res = await axios.get(`${tmdbApi.baseUrl}/movie/popular?api_key=${tmdbApi.apiKey}`)
+
+  if (res.status === 200) {
+    return {
+      props: {
+        response: res.data
+      }
+    }
+  } else {
+    return {
+      props: {
+        response: res.data.status
+      }
+    }
+  }
+
+}
 
 const mapStateToProps = state => ({
   movies: state.movies.movies,
@@ -35,7 +57,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = state => ({
-  GET_MOVIES: GET_MOVIES
+  SET_MOVIES: SET_MOVIES
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
