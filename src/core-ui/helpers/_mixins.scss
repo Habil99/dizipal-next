@@ -1,0 +1,306 @@
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    & {
+      font-size: $min-font-size;
+      @media screen and (min-width: $min-vw) {
+        font-size: calc(
+          #{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} *
+            ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})
+        );
+      }
+      @media screen and (min-width: $max-vw) {
+        font-size: $max-font-size;
+      }
+    }
+  }
+}
+
+@mixin visually-hidden() {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+@mixin show-hidden($pos: absolute) {
+  clip: auto;
+  height: auto;
+  position: $pos;
+  clip-path: none;
+  white-space: normal;
+  width: auto;
+}
+
+@mixin transition($type: all, $duration: 0.2s, $timing: linear) {
+  transition: $type $duration $timing;
+}
+
+@mixin toWhite() {
+  filter: brightness(0) invert(1);
+  -webkit-filter: brightness(0) invert(1);
+}
+
+@mixin toBlack() {
+  filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(181deg) brightness(98%) contrast(106%);
+}
+
+@mixin toRed() {
+  filter: brightness(0) saturate(100%) invert(52%) sepia(64%) saturate(7385%) hue-rotate(345deg) brightness(100%)
+    contrast(84%);
+}
+
+@mixin font-size($value: 16, $weight: 400, $style: normal) {
+  font-size: rem($value);
+  font-weight: $weight;
+  font-style: $style;
+}
+
+@mixin flexbox($dir: row) {
+  display: flex;
+  flex-direction: $dir;
+}
+
+@mixin grid-repeated-cols($size: 0, $gap: 0, $type: "minmax", $count: 0) {
+  $size: rem($size);
+  $gap: rem(20);
+  display: grid;
+  grid-gap: $gap;
+
+  @if $type == "minmax" {
+    grid-template-columns: repeat(auto-fill, minmax($size, 1fr));
+  } @else if ($type == "fr") {
+    grid-template-columns: repeat($count, 1fr);
+  }
+}
+
+@mixin align-center($dir: row, $wrap: nowrap) {
+  @include flexbox($dir);
+  align-items: center;
+  flex-wrap: $wrap;
+}
+
+@mixin flex-center($dir: row) {
+  @include align-center($dir);
+  justify-content: center;
+}
+
+@mixin justify-center($dir: row) {
+  @include align-center($dir);
+  justify-content: center;
+}
+
+@mixin justify-end($dir: row) {
+  @include align-center($dir);
+  justify-content: flex-end;
+}
+
+@mixin justify-between($dir: row) {
+  @include align-center($dir);
+  justify-content: space-between;
+}
+
+@mixin toRem($property, $value) {
+  #{$property}: ($value / 16) + rem;
+}
+
+@mixin box($width) {
+  @include toRem(width, $width);
+  @include toRem(height, $width);
+}
+
+@mixin rem-fallback($property, $values...) {
+  $max: length($values);
+  $pxValues: "";
+  $remValues: "";
+
+  @for $i from 1 through $max {
+    $value: strip-unit(nth($values, $i));
+    $pxValues: #{$pxValues + $value * 16}px;
+
+    @if $i < $max {
+      $pxValues: #{$pxValues + " "};
+    }
+  }
+
+  @for $i from 1 through $max {
+    $value: strip-unit(nth($values, $i));
+    $remValues: #{$remValues + $value}rem;
+
+    @if $i < $max {
+      $remValues: #{$remValues + " "};
+    }
+  }
+
+  #{$property}: $pxValues;
+  #{$property}: $remValues;
+}
+
+@mixin action-css(
+  $types: (
+    hover,
+  )
+) {
+  @each $type in $types {
+    @if $type == "active" {
+      &.#{$type} {
+        @content;
+      }
+    } @else {
+      &:#{$type} {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin pseudo(
+  $pseudos: (
+    before,
+  )
+) {
+  @each $ps in $pseudos {
+    position: relative;
+
+    &:#{$ps} {
+      content: "";
+      position: absolute;
+      @content;
+    }
+  }
+}
+
+@mixin advancedRem($key, $values) {
+  $baseline: rem(16);
+
+  // #{$key}: $values;
+
+  $remlist: ();
+
+  @each $value in $values {
+    @if $value == 0 {
+      $remlist: append($remlist, $value);
+    } @else {
+      $remlist: append($remlist, rem($value));
+    }
+  }
+
+  #{$key}: $remlist;
+}
+
+@mixin tablet {
+  @media screen and (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media screen and (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+    @content;
+  }
+}
+
+@mixin breakpoint($min-width, $max-width) {
+  $min-width: rem($min-width);
+  $max-width: rem($max-width);
+
+  @media screen and (min-width: #{$min-width}) and (max-width: #{$max-width}) {
+    @content;
+  }
+}
+
+@mixin breakpoint-max($max-width) {
+  $max-width: rem($max-width);
+
+  @media screen and (max-width: #{$max-width}) {
+    @content;
+  }
+}
+
+@mixin  breakpoint-min($min-width) {
+  $min-width: rem($min-width);
+
+  @media screen and (min-width: #{$min-width}) {
+    @content;
+  }
+}
+
+@mixin border-slide($fromColor, $color) {
+  z-index: 1;
+
+  @include pseudo((after, before)) {
+    border: 2px solid transparent;
+    width: 0;
+    height: 0;
+    z-index: -1;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+  }
+
+  &::after {
+    bottom: 0;
+    right: 0;
+  }
+
+  &:hover::before,
+  &:hover::after {
+    width: 100%;
+    height: 100%;
+  }
+
+  &:hover::before {
+    border-top-color: $fromColor;
+    border-right-color: $fromColor;
+    transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;
+  }
+
+  &:hover::after {
+    border-bottom-color: $fromColor;
+    border-left-color: $fromColor;
+    transition: border-color 0s ease-out 0.5s, width 0.25s ease-out 0.5s, height 0.25s ease-out 0.75s;
+  }
+
+  &::after {
+    top: 0;
+    left: 0;
+  }
+
+  &:hover::before {
+    border-top-color: $color;
+    border-right-color: $color;
+  }
+
+  &:hover::after {
+    border-bottom-color: $color;
+    border-left-color: $color;
+    transition: height 0.25s ease-out, width 0.25s ease-out 0.25s;
+  }
+}
+
+@mixin arrange($top: auto, $left: auto, $right: auto, $bottom: auto) {
+  $top: rem($top);
+  $left: rem($left);
+  $right: rem($right);
+  $bottom: rem($bottom);
+
+  top: $top;
+  left: $left;
+  right: $right;
+  bottom: $bottom;
+}

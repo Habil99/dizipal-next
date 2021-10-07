@@ -1,0 +1,102 @@
+/* Navbar */
+
+.navbar {
+  @include advancedRem(padding, (20 0));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparentize($body, 0.4);
+
+  &-brand {
+    position: relative;
+    width: 200px;
+    height: 60px;
+  }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+
+  &-item {
+    margin: 0 rem(5);
+
+    a {
+      text-decoration: none;
+      color: $light;
+      @include advancedRem(padding, (10 20));
+      @include transition();
+
+      &:hover {
+        color: $link-hover;
+      }
+    }
+  }
+}
+
+.search-component {
+  position: relative;
+  background-size: contain;
+  height: 350px;
+  width: 100%;
+  background: transparent url("/img/lacasadepapel-jumpsuit.jpg") no-repeat scroll center;
+  background-size: 600px 100%;
+  @include advancedRem(padding, (50 0));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 2;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    z-index: -1;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(79,12,12,0.6839869736957283) 57%, rgba(29,2,4,0.9781046207545518) 100%);
+  }
+
+  &-form {
+    margin-top: rem(60);
+  }
+
+  .search-box {
+    height: 4rem;
+    font-size: 1.25rem;
+    padding-left: 1.5rem;
+    border-radius: 5rem;
+    background-color: $light-2;
+    border: 2px solid $light-2;
+    line-height: calc(2rem - 4px);
+    display: flex;
+    align-items: center;
+
+    input {
+      background: transparent;
+      border: none;
+      color: $light;
+      margin-right: rem(8);
+
+      &::placeholder {
+        color: inherit;
+        opacity: 1;
+      }
+    }
+
+    &-icon {
+      height: 100%;
+      padding: 0 rem(20);
+      @include  flex-center();
+      background: none;
+      border: none;
+      color: inherit;
+    }
+  }
+}

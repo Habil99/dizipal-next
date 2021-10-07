@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;400;500;600;700&display=swap');
+
+@each $type, $weight in $font-types {
+  @font-face {
+    font-family: $font-family;
+    font-weight: $weight;
+    font-style: normal;
+    src: local("Work Sans") url("/fonts/WorkSans-#{$type}") format("truetype");
+    font-display: swap;
+  }
+}

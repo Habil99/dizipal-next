@@ -1,0 +1,46 @@
+$font-family: "Work Sans";
+$font-types: (
+  "Bold": 700,
+  "Regular": 400,
+  "SemiBold": 600,
+  "Medium": 500,
+  "Light": 300,
+);
+
+$body: #000000;
+$text: #fff;
+$link: #ffffff;
+$link-hover: rgb(122, 155, 246);
+$primary: #adadad;
+$secondary: #8c3596;
+$tertiary: #666666;
+$dark: #000;
+$light: #fff;
+$gray: #1b0f30;
+$gray-light: #311e54;
+$gray-dark: #eee;
+$dark-2: rgba(0,0,0,.2);
+$dark-5: rgba(0,0,0,.5);
+$light-1: rgba(255,255,255,.1);
+$light-2: rgba(255,255,255,.2);
+$light-7: rgba(255,255,255,.7);
+$success: #28a745;
+$danger: #FF5757;
+$warning: #ffc107;
+
+$tablet-width: 768px;
+$desktop-width: 1024px;
+$mobile-width: 468px;
+
+$offset-sm: 85;
+$offset-md: 190;
+$offset-lg: 300;
+
+:root {
+  --top-distance: 40px;
+  --scroll-padding: 100px;
+}
+
+$grid-columns: 12 !default;
+$grid-gutter-width: 12px !default;
+$y: rem(20);
