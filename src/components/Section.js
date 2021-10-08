@@ -4,7 +4,7 @@ import {BiPlus} from "react-icons/bi";
 import {BsPlayCircle} from 'react-icons/bs'
 import {Card} from "@/components/index";
 
-const Section = ({title, size, data}) => {
+const Section = ({title, size, data, type}) => {
   return (
     <div className="section">
       <div className="section-heading">
@@ -12,18 +12,20 @@ const Section = ({title, size, data}) => {
         <Link href="/movies">
           <a className="btn-more">
             <BiPlus color="current"/>
-            <span>Show more</span>
+            <Link href={`/movies/${type}`}>
+              <a>Show more</a>
+            </Link>
           </a>
         </Link>
       </div>
       <div className={`section-cards ${size === 'lg' ? 'lg' : 'md'}`}>
-        {data?.map(({id, original_title, vote_average, backdrop_path}) => (
+        {data?.map(({id, original_title, vote_average, poster_path}) => (
           <Card
             key={id}
             id={id}
             title={original_title}
             imdb={vote_average}
-            backdrop_path={backdrop_path}
+            poster_path={poster_path}
           />
         ))}
       </div>

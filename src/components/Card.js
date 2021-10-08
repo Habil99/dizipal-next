@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import {BsPlayCircle} from "react-icons/bs";
+import { tmdbApiConfig } from "@/base";
 
-const Card = ({title, backdrop_path, imdb, id}) => {
+const Card = ({title, poster_path, imdb, id}) => {
   return (
     <div className="section-card">
       <Link href={`/movie/${encodeURIComponent(title)}?id=${id}`}>
@@ -10,7 +11,7 @@ const Card = ({title, backdrop_path, imdb, id}) => {
       </Link>
       <div className="section-card-img">
         <Image
-          src={`https://image.tmdb.org/t/p/original${backdrop_path}`}
+          src={`${tmdbApiConfig.imageUrl}${poster_path}`}
           layout="fill"
           alt="Dizipal Movies"
           placeholder="blur"

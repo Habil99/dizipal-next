@@ -1,16 +1,17 @@
-import {Layout, Section} from "@/components";
+import { Layout, Section } from "@/components";
 import Head from "next/head";
-import {connect} from "react-redux";
-import {SET_MOVIES} from "@/redux/features/moviesSlice";
-import {wrapper} from "@/redux/store";
-import {useEffect} from "react";
-import {useDispatch} from "react-redux";
+import { connect } from "react-redux";
+import { SET_MOVIES } from "@/redux/features/moviesSlice";
+import { wrapper } from "@/redux/store";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import axios from "axios";
-import {tmdbApi} from "@/base";
+import { tmdbApiConfig } from "@/base";
+import { getPopularMovies, getTopRateMovies } from "@/services/tmdbApi";
 
-import {SearchBanner} from "@/components";
+import { SearchBanner } from "@/components";
 
-function Home({response, movies, status, SET_MOVIES, name}) {
+function Home({ response, topRatedMovies, movies, status, SET_MOVIES, name }) {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -22,19 +23,19 @@ function Home({response, movies, status, SET_MOVIES, name}) {
       <Head>
         <title>Dizipal NextJs</title>
       </Head>
-      <SearchBanner/>
+      <SearchBanner />
       <div className="g-container--def g-container">
         <h1>{name}</h1>
-        <pre>{JSON.stringify(movies.results)}</pre>
-        {status === 'loading' ? <div>Loading...</div> : <Section size="lg" title="Popular movies" data={movies.results}/>}
-        <Section size="md" title="Series"/>
+        {/* <pre>{JSON.stringify(movies.results)}</pre> */}
+        <Section size="lg" title="Popular movies" data={movies.results} type="popular" />
+        <Section size="md" title="Top rated" data={topRatedMovies} type="top_rated" />
       </div>
     </>
   )
 }
 //
 // export const getStaticPaths = async () => {
-//   const res = await axios.get(`${tmdbApi.baseUrl}/movie/popular?api_key=${tmdbApi.apiKey}`)
+//   const res = await axios.get(`${tmdbApiConfig.baseUrl}/movie/popular?api_key=${tmdbApiConfig.apiKey}`)
 //   const {results} = res.data
 //
 //   const paths = results.map(({ id, original_title }) => ({
@@ -51,12 +52,14 @@ function Home({response, movies, status, SET_MOVIES, name}) {
 // }
 
 export const getServerSideProps = async () => {
-  const res = await axios.get(`${tmdbApi.baseUrl}/movie/popular?api_key=${tmdbApi.apiKey}`)
+  const res = await getPopularMovies()
+  const { data: topRated } = await getTopRateMovies()
 
   if (res.status === 200) {
     return {
       props: {
-        response: res.data
+        response: res.data,
+        topRatedMovies: topRated.results
       }
     }
   } else {
