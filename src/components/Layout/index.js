@@ -1,15 +1,13 @@
 import React from 'react';
 import Navbar from "@/components/Layout/Navbar";
-import Image from "next/image";
-import {FiSearch} from 'react-icons/fi'
-import NextNProgress from "@/components/NProgress";
 
-const index = ({children}) => {
+const index = ({ children }) => {
   return (
     <div className="dizipal">
-      <NextNProgress />
-      <Navbar/>
-      {children}
+      <Navbar />
+      <div className="g-container g-container--def">
+        {children}
+      </div>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {BsPlayCircle} from "react-icons/bs";
 
-const SectionCard = ({title, backdrop_path, imdb, id}) => {
+const Card = ({title, backdrop_path, imdb, id}) => {
   return (
     <div className="section-card">
       <Link href={`/movie/${encodeURIComponent(title)}?id=${id}`}>
@@ -32,4 +32,4 @@ const SectionCard = ({title, backdrop_path, imdb, id}) => {
   )
 }
 
-export default SectionCard;
+export default Card;

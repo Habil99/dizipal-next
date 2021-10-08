@@ -8,7 +8,7 @@ import {useDispatch} from "react-redux";
 import axios from "axios";
 import {tmdbApi} from "@/base";
 
-import { SearchBanner } from "@/components";
+import {SearchBanner} from "@/components";
 
 function Home({response, movies, status, SET_MOVIES, name}) {
   const dispatch = useDispatch()
@@ -22,17 +22,35 @@ function Home({response, movies, status, SET_MOVIES, name}) {
       <Head>
         <title>Dizipal NextJs</title>
       </Head>
-      <SearchBanner />
+      <SearchBanner/>
       <div className="g-container--def g-container">
         <h1>{name}</h1>
-        {status === 'loading' ? <div>Loading...</div> : <Section size="lg" title="Movies" data={movies.results}/>}
+        <pre>{JSON.stringify(movies.results)}</pre>
+        {status === 'loading' ? <div>Loading...</div> : <Section size="lg" title="Popular movies" data={movies.results}/>}
         <Section size="md" title="Series"/>
       </div>
     </>
   )
 }
+//
+// export const getStaticPaths = async () => {
+//   const res = await axios.get(`${tmdbApi.baseUrl}/movie/popular?api_key=${tmdbApi.apiKey}`)
+//   const {results} = res.data
+//
+//   const paths = results.map(({ id, original_title }) => ({
+//     params: {
+//       name: original_title,
+//       id,
+//     }
+//   }))
+//
+//   return {
+//     paths,
+//     fallback: 'blocking'
+//   }
+// }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const res = await axios.get(`${tmdbApi.baseUrl}/movie/popular?api_key=${tmdbApi.apiKey}`)
 
   if (res.status === 200) {

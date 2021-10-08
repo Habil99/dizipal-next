@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {BiPlus} from "react-icons/bi";
 import {BsPlayCircle} from 'react-icons/bs'
-import {SectionCard} from "@/components/index";
+import {Card} from "@/components/index";
 
 const Section = ({title, size, data}) => {
   return (
@@ -18,7 +18,7 @@ const Section = ({title, size, data}) => {
       </div>
       <div className={`section-cards ${size === 'lg' ? 'lg' : 'md'}`}>
         {data?.map(({id, original_title, vote_average, backdrop_path}) => (
-          <SectionCard
+          <Card
             key={id}
             id={id}
             title={original_title}
